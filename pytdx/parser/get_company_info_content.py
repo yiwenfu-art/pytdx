@@ -9,7 +9,9 @@ import six
 
 class GetCompanyInfoContent(BaseParser):
 
-    def setParams(self, market, code, filename, start, length):
+    def setParams(self, market, code, filename, start, length, decode):
+        self.decode_flag=decode
+        
         if type(code) is six.text_type:
             code = code.encode("utf-8")
 
@@ -29,4 +31,7 @@ class GetCompanyInfoContent(BaseParser):
         _, length = struct.unpack(u'<10sH', body_buf[:12])
         pos += 12
         content = body_buf[pos: pos+length]
-        return content.decode("gbk")
+        if self.decode_flag:
+            return content.decode("gbk")
+        else:
+            return content
